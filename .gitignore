@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Data files (too large for GitHub)
+*.csv
+*.xlsx
+*.xls
+*.as
+*.zip
+*.rar
+*.7z
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Output folders (we'll exclude large data)
+mortality_extracted/
+household_level/
+final_merged/
+csv_complete/
+organized_surveys/
+properly_converted/
+
+# Keep only the final dataset if needed
+# !final_analysis_dataset.csv
