@@ -96,34 +96,4 @@ python 02_extract_mortality.py
 python 03_convert_to_household.py
 python 04_merge_datasets.py
 python 05_machine_learning.py
-## Outputs
-File	Description
-final_analysis_dataset_fixed.csv	Clean dataset (41,679 households)
-confusion_matrices_fixed.png	Confusion matrix plots
-roc_curves_fixed.png	ROC curves comparison
-feature_importance_fixed.png	Feature importance plot
-Folder Structure
-text
-📁 SMART-Survey-Processing-Pipeline/
-├── 📄 README.md
-├── 📄 .gitignore
-├── 📄 requirements.txt
-├── 📄 01_convert_as_to_csv.py
-├── 📄 02_extract_mortality.py
-├── 📄 03_convert_to_household.py
-├── 📄 04_merge_datasets.py
-├── 📄 05_machine_learning.py
-├── 📄 apply_fixes.py
-├── 📄 rename_files.py
-├── 🖼️ confusion_matrices_fixed.png
-├── 🖼️ roc_curves_fixed.png
-└── 🖼️ feature_importance_fixed.png
-Author
-Sumaya Hussein
-
-Date
-July 2026
-
-License
-This project is for educational purposes.
 
