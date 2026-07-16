@@ -1,14 +1,14 @@
 """
-Machine Learning: Train and Evaluate Models
-- Trains 4 models: Logistic Regression, Decision Tree, Random Forest, XGBoost
-- Evaluates: Accuracy, Recall, F1-Score, AUC
-- Generates confusion matrices, ROC curves, feature importance
+Machine Learning on Fixed Dataset with Proper Features
+- Uses final_analysis_dataset_fixed.csv
+- Features: HH_Size, Males, Females, YEAR, MONTH_SIN, MONTH_COS
+- Removed Person_Time (redundant)
+- Added cyclical month encoding
 """
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
@@ -17,22 +17,18 @@ from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 from sklearn.metrics import (
     accuracy_score, recall_score, f1_score, 
-    roc_auc_score, confusion_matrix, roc_curve,
-    classification_report
+    roc_auc_score, confusion_matrix, roc_curve
 )
 import warnings
 warnings.filterwarnings('ignore')
 
-# ==============================================
-# LOAD DATA
-# ==============================================
-
 print("="*80)
-print("LOADING DATA")
+print("MACHINE LEARNING ON FIXED DATASET")
 print("="*80)
 
-df = pd.read_csv('final_analysis_dataset.csv')
-print(f"Total households: {len(df)}")
+# Load the fixed dataset
+df = pd.read_csv('final_analysis_dataset_fixed.csv')
+print(f"\nTotal households: {len(df)}")
 print(f"Death rate: {df['Deaths'].mean()*100:.2f}%")
 
 # ==============================================
@@ -43,18 +39,26 @@ print("\n" + "="*80)
 print("PREPARING FEATURES")
 print("="*80)
 
-features = ['HH_Size', 'Males', 'Females', 'Person_Time', 'YEAR', 'MONTH']
+# Features: removed Person_Time, added cyclical month
+features = ['HH_Size', 'Males', 'Females', 'YEAR', 'MONTH_SIN', 'MONTH_COS']
+
+# Only keep features that exist
 available_features = [f for f in features if f in df.columns]
+
+print(f"Features used: {available_features}")
 
 X = df[available_features].copy()
 y = df['Deaths'].copy()
 
+# Convert Deaths to binary (0 or 1)
+y = y.apply(lambda x: 1 if x > 0 else 0)
+
 # Fill missing values
 X = X.fillna(X.mean())
 
-print(f"Features: {available_features}")
 print(f"X shape: {X.shape}")
 print(f"y shape: {y.shape}")
+print(f"Death rate: {y.mean()*100:.2f}%")
 
 # ==============================================
 # TRAIN-TEST SPLIT
@@ -179,9 +183,9 @@ for idx, (name, result) in enumerate(results.items()):
     ax.set_ylabel('Actual')
 
 plt.tight_layout()
-plt.savefig('confusion_matrices.png', dpi=300)
+plt.savefig('confusion_matrices_fixed.png', dpi=300)
 plt.show()
-print("✅ Confusion matrices saved as: confusion_matrices.png")
+print("✅ Confusion matrices saved as: confusion_matrices_fixed.png")
 
 # ==============================================
 # ROC CURVES
@@ -197,23 +201,24 @@ for name, model in models.items():
 plt.plot([0, 1], [0, 1], 'k--', label='Random (AUC = 0.5)')
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
-plt.title('ROC Curves - Model Comparison')
+plt.title('ROC Curves - Fixed Dataset')
 plt.legend(loc='lower right')
 plt.grid(True)
-plt.savefig('roc_curves.png', dpi=300)
+plt.savefig('roc_curves_fixed.png', dpi=300)
 plt.show()
-print("✅ ROC curves saved as: roc_curves.png")
+print("✅ ROC curves saved as: roc_curves_fixed.png")
 
 # ==============================================
 # FINAL SUMMARY
 # ==============================================
 
 print("\n" + "="*80)
-print("FINAL SUMMARY")
+print("FINAL SUMMARY - FIXED DATASET")
 print("="*80)
 
 print(f"\n📊 Dataset: {len(df)} households")
 print(f"📊 Death rate: {df['Deaths'].mean()*100:.2f}%")
+print(f"📊 Features used: {len(available_features)} (removed Person_Time, added cyclical month)")
 
 print("\n📊 Model Performance Summary:")
 print(comparison_df.to_string(index=False))
